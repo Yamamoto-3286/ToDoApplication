@@ -118,10 +118,13 @@ public class TaskDaoImpl implements TaskDao
 	public List<Task> findByType(int typeId)
 	{
 		// 2-1 指定したtype_idと一致するタスクのリストを取得するためのSQLを記述する
-		String sql = null;
+		String sql = "SELECT task.id, user_id, type_id, title, detail, deadline, "
+			+ "type, comment FROM task "
+			+ "INNER JOIN task_type ON task.type_id = task_type.id "
+			+ "WHERE task.id = ?";
 
 		// 2-2 SQLとtypeIdを渡し、タスク一覧をMapのListで取得する
-		List<Map<String, Object>> resultList = null;
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql, typeId);
 
 		// return用の空のListを用意
 		List<Task> list = new ArrayList<>();
